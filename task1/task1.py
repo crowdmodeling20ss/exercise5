@@ -1,8 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-from Util import *
+import sys
 
+sys.path.append('../')
+from Util import *
 
 def distance_matrix(x):
     n = x.shape[0]
