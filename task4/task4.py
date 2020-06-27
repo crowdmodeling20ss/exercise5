@@ -84,10 +84,10 @@ def part_1():
     x = x0[:x0.shape[0] - n_delay]
     delayed = x0[n_delay:]
     fig, ax = plt.subplots(1, 1)
-    ax.plot(x, delayed, c='dodgerblue', linewidth=0.5)
+    ax.plot(x, delayed, c='dodgerblue', linewidth=0.5) # x0
     ax.set_xlabel('$x(t)$')
-    ax.set_ylabel('$x(t+ \Delta t)$')
-    ax.set_title('$\Delta t = {}$'.format(n_delay))
+    ax.set_ylabel('$x(t+ \Delta n)$')
+    ax.set_title('$\Delta n = {}$'.format(n_delay))
     plt.show()
 
     # Plotting the coordinate against its delayed version , 3 dimensional
@@ -99,9 +99,9 @@ def part_1():
     ax0 = fig.gca(projection='3d')
     ax0.plot(x_2, delayed_1, delayed_2, c='dodgerblue', linestyle=':', antialiased=True)
     ax0.set_xlabel('$x(t)$')
-    ax0.set_ylabel('$x(t+ \Delta t)$')
-    ax0.set_zlabel('$x(t+ 2 \Delta t)$')
-    ax0.set_title('$\Delta t = {}$'.format(n_delay))
+    ax0.set_ylabel('$x(t+ \Delta n)$')
+    ax0.set_zlabel('$x(t+ 2 \Delta n)$')
+    ax0.set_title('$\Delta n = {}$'.format(n_delay))
     plt.show()
 
 def main():
