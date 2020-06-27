@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.linalg import lstsq
 
+
 def read_file(file_path):
     """
     Read data from a given file then return the numpy array
@@ -30,6 +31,21 @@ def mse(y_truth, y_pred):
     return ((y_truth - y_pred) ** 2).mean()
 
 
+def distance_matrix(x):
+    """
+
+    :param x:
+    :return:
+    """
+    n = x.shape[0]
+    dist_matrix = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            dist_matrix[i, j] = np.linalg.norm(x[i] - x[j])
+
+    return dist_matrix
+
+
 def linear_approximation(x, fx):
     """
 
@@ -39,3 +55,26 @@ def linear_approximation(x, fx):
     """
     A, res, rnk, s = lstsq(x, fx)
     return A
+
+
+def nonlinear_approximation(x, fx, epsilon, L):
+    """
+
+    :param x:
+    :param fx:
+    :param epsilon:
+    :param L:
+    :return:
+    """
+    number_of_rows = x.shape[0]
+    random_indices = np.random.choice(number_of_rows, size=L, replace=False)
+    xl = x[random_indices]
+
+    # Radial basis functions
+    phis = np.zeros((number_of_rows, L))
+    for l in range(L):
+        phis[:, l] = np.exp(-(np.linalg.norm(x - xl[l], axis=1) ** 2) / epsilon ** 2)
+
+    C = linear_approximation(phis, fx)
+
+    return C, phis
