@@ -1,7 +1,6 @@
 import numpy as np
 from scipy.linalg import lstsq
 
-
 def read_file(file_path):
     """
     Read data from a given file then return the numpy array
@@ -78,3 +77,23 @@ def nonlinear_approximation(x, fx, epsilon, L):
     C = linear_approximation(phis, fx)
 
     return C, phis
+
+
+def lorenzEquations(t, x0, sigma, rho, beta):
+    """
+    Computes result of Lorenz Equation given its parameters.
+
+    :param t: One-dimensional independent variable (time)
+    :param x0: Starting points of the system.
+    :param sigma: Parameter sigma of the function.
+    :param rho: Parameter rho of the function.
+    :param beta: Parameter beta of the function.
+    :return: Calculated value of the function.
+    """
+    x, y, z = x0
+    dxdt = sigma * (y - x)
+    dydt = x * (rho - z) - y
+    dzdt = x * y - beta * z
+
+    return dxdt, dydt, dzdt
+
