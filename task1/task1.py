@@ -6,15 +6,6 @@ import sys
 sys.path.append('../')
 from Util import *
 
-def distance_matrix(x):
-    n = x.shape[0]
-    dist_matrix = np.zeros((n, n))
-    for i in range(n):
-        for j in range(n):
-            dist_matrix[i, j] = np.linalg.norm(x[i] - x[j])
-
-    return dist_matrix
-
 
 def plot_linear_approximation(x, fx, fx_approximated):
     fig, ax = plt.subplots(1, 1)
@@ -35,21 +26,6 @@ def plot_nonlinear_approximation(x, fx, fx_approximated, L, epsilon):
     ax.set_ylabel('f(x)')
     plt.legend()
     plt.show()
-
-
-def nonlinear_approximation(x, fx, epsilon, L):
-    number_of_rows = x.shape[0]
-    random_indices = np.random.choice(number_of_rows, size=L, replace=False)
-    xl = x[random_indices]
-
-    # Radial basis functions
-    phis = np.zeros((number_of_rows, L))
-    for l in range(L):
-        phis[:, l] = np.exp(-(np.linalg.norm(x - xl[l], axis=1) ** 2) / epsilon ** 2)
-
-    C = linear_approximation(phis, fx)
-
-    return C, phis
 
 
 def plot_mse_vs_epsilon_and_l(D, fx_approximated_linear, fx_linear, x_linear_new):
