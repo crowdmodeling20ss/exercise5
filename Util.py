@@ -80,7 +80,6 @@ def nonlinear_approximation(x, fx, epsilon, L):
     return C, phis
 
 
-
 def lorenzEquations(t, x0, sigma, rho, beta):
     """
     Computes result of Lorenz Equation given its parameters.
