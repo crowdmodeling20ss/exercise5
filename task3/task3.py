@@ -12,17 +12,19 @@ def linear_prediction(X_0, X_1, dt):
     X_1_prediction = NU * dt + X_0
     mean_squared_error = mse(X_1, X_1_prediction)
 
-    return X_1_prediction, mean_squared_error, V
+    return X_1_prediction, mean_squared_error, NU
 
 
-def nonlinear_prediction(X_0, X_1, L, epsilon=0.1761680514483659):
+def nonlinear_prediction(X_0, X_1, L, dt, epsilon=0.1761680514483659):
     # D = distance_matrix(X_0)
     # np.sqrt(np.max(D)) * 0.05
-    C, phis = nonlinear_approximation(X_0, X_1, epsilon, L)
-    X_1_prediction = np.matmul(phis, C)
+    V = (X_1 - X_0) / dt  # ???
+    C, phis = nonlinear_approximation(X_0, V, epsilon, L)
+    NU = np.matmul(phis, C)
+    X_1_prediction = NU * dt + X_0
     mean_squared_error = mse(X_1, X_1_prediction)
 
-    return X_1_prediction, mean_squared_error
+    return X_1_prediction, NU, mean_squared_error
 
 
 def part1(X_0, X_1):
@@ -51,45 +53,52 @@ def part1(X_0, X_1):
     plt.savefig('plots/task_3_part_1_approximation.png')
     plt.show()
 
-    dts = np.linspace(0.00001, 1, 100000)
-    mse = np.zeros(dts.shape)
+    dts = np.linspace(0.000000000001, 1, 100)
+    mses = np.zeros(dts.shape)
     for i, dt in enumerate(dts):
-        _, mse[i], _ = linear_prediction(X_0, X_1, dt)
-        print("dt" + str(dt) + " mse[" + str(i) + "]:" + str(mse[i]))
+        # _, mse[i], _ = linear_prediction(X_0, X_1, dt)
+        X_1_prediction = V * dt + X_0
+        mses[i] = mse(X_1, X_1_prediction)
+        print("dt" + str(dt) + " mse[" + str(i) + "]:" + str(mses[i]))
 
     fig = plt.figure()
     ax = fig.add_subplot()
-    ax.scatter(dts, mse, color='dodgerblue', s=2)
+    ax.scatter(dts, mses, color='dodgerblue', s=2)
     plt.xlabel("$\Delta t$")
     plt.ylabel("MSE")
     plt.legend()
     plt.savefig('plots/task_3_part_1_mse_vs_dt.png')
     plt.show()
 
+    # dt does not affect the mean square error
+
 
 def part2(X_0, X_1):
     epsilon = 0.1761680514483659
+    dt = 0.1
 
     # Plot true value and approximated values
-    X_1_prediction_L_100, mse_L_100 = nonlinear_prediction(X_0, X_1, 100, epsilon)
-    X_1_prediction_L_1000, mse_L_1000 = nonlinear_prediction(X_0, X_1, 1000, epsilon)
+    X_1_prediction_L_100, V_L_100, mse_L_100 = nonlinear_prediction(X_0, X_1, 100, dt, epsilon)
+    X_1_prediction_L_1000, V_L_1000, mse_L_1000 = nonlinear_prediction(X_0, X_1, 1000, dt, epsilon)
 
     fig = plt.figure()
     ax = fig.add_subplot()
     ax.scatter(X_1[:, 0], X_1[:, 1], color='indianred', s=2, label="X1")
+    ax.scatter(V_L_1000[:, 0], V_L_1000[:, 1], color='gold', s=2, label="Vector field")
     ax.scatter(X_1_prediction_L_100[:, 0], X_1_prediction_L_100[:, 1], color='black', s=2,
                label="X_1_prediction(L=100, MSE={:.3f})".format(mse_L_100))
     ax.scatter(X_1_prediction_L_1000[:, 0], X_1_prediction_L_1000[:, 1], color='dodgerblue', s=2,
                label="X_1_prediction(L=1000, MSE={:.3f})".format(mse_L_1000))
     ax.set_xlim([-4.5, 4.5])
     ax.set_ylim([-4.5, 4.5])
-    ax.set_title('$\epsilon$ = {}'.format(epsilon))
+    ax.set_title('$\Delta t$ = {}, $\epsilon$ = {}'.format(dt, epsilon))
     plt.xlabel("coordinate 1")
     plt.ylabel("coordinate 2")
-    plt.savefig('plots/task_3_part_2_approximation.png')
     plt.legend()
+    plt.savefig('plots/task_3_part_2_approximation.png')
     plt.show()
 
+    '''
     # Plot MSE vs L Graph
     Ls = np.arange(1, 2000, 1)
     mse = np.zeros(Ls.shape)
@@ -104,6 +113,7 @@ def part2(X_0, X_1):
     plt.legend()
     plt.savefig('plots/task_3_part_2_mse_vs_l.png')
     plt.show()
+    '''
 
     """
     ?How do the errors differ to the linear approximation?
@@ -115,13 +125,33 @@ def part2(X_0, X_1):
 
     # Why?
     """
+    plot_part3_mse_vs_dt(V_L_1000, mse_L_1000, X_0, X_1, start=0.000000000001, stop=0.3)
+    plot_part3_mse_vs_dt(V_L_1000, mse_L_1000, X_0, X_1, start=0.000000000001, stop=1)
+
+
+def plot_part3_mse_vs_dt(V_L_1000, mse_L_1000, X_0, X_1, start, stop):
+    dts = np.linspace(start, stop, 100)
+    mses = np.zeros(dts.shape)
+    for i, dt in enumerate(dts):
+        X_1_prediction_L_1000 = V_L_1000 * dt + X_0
+        mses[i] = mse(X_1, X_1_prediction_L_1000)
+        print("dt" + str(dt) + " mse[" + str(i) + "]:" + str(mses[i]))
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    ax.scatter(dts, mses, color='dodgerblue', s=2)
+    ax.set_title('Vector Field for L=1000, MSE = {:.3f}'.format(mse_L_1000))
+    plt.xlabel("$\Delta t$")
+    plt.ylabel("MSE")
+    plt.legend()
+    plt.savefig('plots/task_3_part_3_mse_vs_dt' + str(start) + '_' + str(stop) + '.png')
+    plt.show()
 
 
 def main():
     X_0 = read_file("nonlinear_vectorfield_data_x0.txt")  # (2000, 2)
     X_1 = read_file("nonlinear_vectorfield_data_x1.txt")  # (2000, 2)
 
-    # part1(X_0, X_1)
+    part1(X_0, X_1)
     part2(X_0, X_1)
 
 
