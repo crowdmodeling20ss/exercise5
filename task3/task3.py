@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 sys.path.append('../')
 from Util import *
+import time
 
 
 def linear_prediction(X_0, X_1, dt):
@@ -146,13 +147,38 @@ def plot_part3_mse_vs_dt(V_L_1000, mse_L_1000, X_0, X_1, start, stop):
     plt.savefig('plots/task_3_part_3_mse_vs_dt' + str(start) + '_' + str(stop) + '.png')
     plt.show()
 
+def part3(X_0, X_1):
+    epsilon = 0.1761680514483659
+    dt = 0.5
+
+    # Plot true value and approximated values
+    X_1_prediction_L_1000, V_L_1000, mse_L_1000 = nonlinear_prediction(X_0, X_1, 1000, dt, epsilon)
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    plt.xlabel("coordinate 1")
+    plt.ylabel("coordinate 2")
+    T = 100
+    # trajectory = np.zeros((int(T / dt), len(X_0)))
+    x0 = X_0
+    for i, t in enumerate(np.arange(0, T, dt)):
+        x1 = (V_L_1000 * dt) + x0
+        # trajectory[i] = x1
+        not_changed = len(np.where((x0 - x1) == 0)[0])
+        x0 = x1
+        #ax.cla()
+        c = 'indianred' if i % 2 == 0 else 'black'
+        ax.scatter(x0[:, 0][0], x0[:, 1][0], color='black', alpha=i*1.0/T, s=2, label="x")
+        ax.set_title('Step = {}, Not Changed = #{}'.format(i, not_changed))
+    plt.show()
 
 def main():
     X_0 = read_file("nonlinear_vectorfield_data_x0.txt")  # (2000, 2)
     X_1 = read_file("nonlinear_vectorfield_data_x1.txt")  # (2000, 2)
 
-    part1(X_0, X_1)
-    part2(X_0, X_1)
+    # part1(X_0, X_1)
+    #part2(X_0, X_1)
+    part3(X_0, X_1)
 
 
 if __name__ == '__main__':
