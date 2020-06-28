@@ -18,7 +18,7 @@ def part1(X_0, X_1):
     fig, ax = plt.subplots(1, 1)
     ax.scatter(X_0[:, 0], X_0[:, 1], color='indianred', s=2, label="X0")
     ax.scatter(X_1[:, 0], X_1[:, 1], color='dodgerblue', s=2, label="X1")
-    ax.scatter(V[:, 0], V[:, 1], color='black', s=2, label="V")
+    ax.scatter(NU[:, 0], NU[:, 1], color='black', s=2, label="Vector Field")
     ax.set_xlabel('x')
     ax.set_ylabel('f(x)')
     plt.legend()
