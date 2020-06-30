@@ -80,8 +80,15 @@ def part_1():
     fx_linear = data_linear[:, 1]
     x_linear_new = np.vstack([x_linear, np.ones(len(x_linear))]).T  # (1000, 2)
     linear_start_time = time.time()
-    A = linear_approximation(x_linear_new, fx_linear)  # (2, )
-    fx_approximated_linear = np.matmul(x_linear_new, A)  # or A * x_linear ? did not change anything.
+
+    # y = ax + b
+    # x_linear_new: (N, 2), first column has x's which will be multiplied by 'a' and,
+    # the second column has 1's which will be multiplied by 'b'
+    # AT: (2,), [a, b]
+    # F = X.dot(A.T)
+    AT = linear_approximation(x_linear_new, fx_linear)
+    fx_approximated_linear = np.matmul(x_linear_new, AT)
+    # or A * x_linear ? did not change anything. = coz A:(2,) x_linear:(N, 2). it makes element-wise operation. will not work for different dimensions of A
     linear_cal_time = time.time() - linear_start_time
     plot_linear_approximation(x_linear, fx_linear, fx_approximated_linear)
 

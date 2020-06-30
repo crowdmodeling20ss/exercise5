@@ -51,13 +51,21 @@ def distance_matrix(x):
 
 def linear_approximation(x, fx):
     """
+    Linear function in matrix notation:
+    F = XA.T
 
-    :param x:
-    :param fx:
-    :return:
+    'lstsq' finds and returns the p in equation:
+    y = M.dot(p)
+
+    Therefore 'lstsq' return transpose of matrix A for our case.
+
+    :param x: [N, n] design matrix
+    :param fx: [N, d] output matrix
+    :return: [n, d] A.T
     """
-    A, res, rnk, s = lstsq(x, fx)
-    return A
+    AT, res, rnk, s = lstsq(x, fx)
+    return AT
+
 
 def plot_mse_vs_epsilon_and_l_task5(fx_approximated_linear, fx_linear, x_linear_new):
     linear_approximation_error = mse(fx_linear, fx_approximated_linear)  # mse=1.0604702468531419e-10
@@ -85,7 +93,7 @@ def plot_mse_vs_epsilon_and_l_task5(fx_approximated_linear, fx_linear, x_linear_
     # Calculate MSE for each L value
     Ls = np.arange(1, 1000, 2)
     mess = np.zeros(Ls.shape)
-    #epsilon = np.sqrt(np.max(D)) * 0.05
+    # epsilon = np.sqrt(np.max(D)) * 0.05
     epsilon = 0.8
     for index, L in enumerate(Ls):
         C, phis = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L, [])
@@ -106,29 +114,45 @@ def plot_mse_vs_epsilon_and_l_task5(fx_approximated_linear, fx_linear, x_linear_
     plt.show()
 
 
+def matrix(x):
+    """
+    TODO: research there should be more convenient way to do this in numpy!
+
+    If input x is vector reshape it into matrix form (N, 1);
+    otherwise leave as it is.
+
+    :param x: vector (N,) or matrix (N, L)
+    :return: (N,1) or (N, L) matrix form of x
+    """
+    if len(x.shape) == 1:
+        return x.reshape(-1, 1)
+
+    return x
+
 
 def nonlinear_approximation(x, fx, epsilon, L, xl):
-    """
+    """""
 
-    :param x:
-    :param fx:
-    :param epsilon:
-    :param L:
+    :param x: (N, n) input values
+    :param fx: (N, d) output values
+    :param epsilon: bandwidth
+    :param L: number of basis functions
+    :param xl: (L, n) predefined random points for basis functions.
     :return:
-    """
+    """""
     number_of_rows = x.shape[0]
     if xl == []:
         random_indices = np.random.choice(number_of_rows, size=L, replace=False)
-        xl = x[random_indices]
+        xl = x[random_indices]  # xl ∈ R^n
 
     # Radial basis functions
     phis = np.zeros((number_of_rows, L))
     for l in range(L):
-        phis[:, l] = np.exp(-(np.linalg.norm(x - xl[l], axis=1) ** 2) / epsilon ** 2)
+        phis[:, l] = np.exp(-(np.linalg.norm(matrix(x) - xl[l], axis=1) ** 2) / epsilon ** 2)
 
-    C = linear_approximation(phis, fx)
+    CT = linear_approximation(phis, fx)  # C.T = (L, d)
 
-    return C, phis, xl
+    return CT, phis, xl
 
 
 def lorenzEquations(t, x0, sigma, rho, beta):
@@ -148,4 +172,3 @@ def lorenzEquations(t, x0, sigma, rho, beta):
     dzdt = x * y - beta * z
 
     return dxdt, dydt, dzdt
-
