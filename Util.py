@@ -88,7 +88,7 @@ def plot_mse_vs_epsilon_and_l_task5(fx_approximated_linear, fx_linear, x_linear_
     #epsilon = np.sqrt(np.max(D)) * 0.05
     epsilon = 0.8
     for index, L in enumerate(Ls):
-        C, phis = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L)
+        C, phis = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L, [])
         fx_approximated_nonlinear = np.matmul(phis, C)
 
         nonlinear_approximation_error = mse(fx_linear, fx_approximated_nonlinear.reshape(-1))
