@@ -18,7 +18,7 @@ def linear_prediction(X_0, X_1, dt):
 def nonlinear_prediction(X_0, X_1, L, epsilon=0.1761680514483659):
     # D = distance_matrix(X_0)
     # np.sqrt(np.max(D)) * 0.05
-    C, phis = nonlinear_approximation(X_0, X_1, epsilon, L)
+    C, phis = nonlinear_approximation(X_0, X_1, epsilon, L, [])
     X_1_prediction = np.matmul(phis, C)
     mean_squared_error = mse(X_1, X_1_prediction)
 

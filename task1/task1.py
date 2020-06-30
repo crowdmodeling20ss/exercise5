@@ -35,7 +35,7 @@ def plot_mse_vs_epsilon_and_l(D, fx_approximated_linear, fx_linear, x_linear_new
     es = np.linspace(0.05, 10, 100) * np.sqrt(np.max(D))
     mess = np.zeros(es.shape)
     for index, epsilon in enumerate(es):
-        C, phis = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L)
+        C, phis, xl = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L, [])
         fx_approximated_nonlinear = np.matmul(phis, C)
 
         nonlinear_approximation_error = mse(fx_linear, fx_approximated_nonlinear.reshape(-1))
@@ -56,7 +56,7 @@ def plot_mse_vs_epsilon_and_l(D, fx_approximated_linear, fx_linear, x_linear_new
     mess = np.zeros(Ls.shape)
     epsilon = np.sqrt(np.max(D)) * 0.05
     for index, L in enumerate(Ls):
-        C, phis = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L)
+        C, phis, xl = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L, [])
         fx_approximated_nonlinear = np.matmul(phis, C)
 
         nonlinear_approximation_error = mse(fx_linear, fx_approximated_nonlinear.reshape(-1))
@@ -90,7 +90,7 @@ def part_1():
     nonlinear_start_time = time.time()
     D = distance_matrix(x_linear)
     epsilon = np.sqrt(np.max(D)) * 0.05
-    C, phis = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L)
+    C, phis, xl = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L, [])
     fx_approximated_nonlinear = np.matmul(phis, C)
     nonlinear_cal_time = time.time() - nonlinear_start_time
     plot_nonlinear_approximation(x_linear, fx_linear, fx_approximated_nonlinear, L, epsilon)
@@ -125,7 +125,7 @@ def part_3():
     epsilon = np.sqrt(np.max(D)) * 0.05
 
     x_nonlinear_new = np.vstack([x_nonlinear, np.ones(len(x_nonlinear))]).T
-    C, phis = nonlinear_approximation(x_nonlinear_new, fx_nonlinear[:, np.newaxis], epsilon, L)
+    C, phis, xl = nonlinear_approximation(x_nonlinear_new, fx_nonlinear[:, np.newaxis], epsilon, L, [])
     fx_approximated_nonlinear = np.matmul(phis, C)
     plot_nonlinear_approximation(x_nonlinear, fx_nonlinear, fx_approximated_nonlinear, L, epsilon)
 
