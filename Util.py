@@ -114,28 +114,45 @@ def plot_mse_vs_epsilon_and_l_task5(fx_approximated_linear, fx_linear, x_linear_
     plt.show()
 
 
-def nonlinear_approximation(x, fx, epsilon, L, xl):
+def matrix(x):
     """
+    TODO: research there should be more convenient way to do this in numpy!
 
-    :param x:
-    :param fx:
-    :param epsilon:
-    :param L:
-    :return:
+    If input x is vector reshape it into matrix form (N, 1);
+    otherwise leave as it is.
+
+    :param x: vector (N,) or matrix (N, L)
+    :return: (N,1) or (N, L) matrix form of x
     """
+    if len(x.shape) == 1:
+        return x.reshape(-1, 1)
+
+    return x
+
+
+def nonlinear_approximation(x, fx, epsilon, L, xl):
+    """""
+
+    :param x: (N, n) input values
+    :param fx: (N, d) output values
+    :param epsilon: bandwidth
+    :param L: number of basis functions
+    :param xl: (L, n) predefined random points for basis functions.
+    :return:
+    """""
     number_of_rows = x.shape[0]
     if xl == []:
         random_indices = np.random.choice(number_of_rows, size=L, replace=False)
-        xl = x[random_indices]
+        xl = x[random_indices]  # xl ∈ R^n
 
     # Radial basis functions
     phis = np.zeros((number_of_rows, L))
     for l in range(L):
-        phis[:, l] = np.exp(-(np.linalg.norm(x - xl[l], axis=1) ** 2) / epsilon ** 2)
+        phis[:, l] = np.exp(-(np.linalg.norm(matrix(x) - xl[l], axis=1) ** 2) / epsilon ** 2)
 
-    C = linear_approximation(phis, fx)
+    CT = linear_approximation(phis, fx)  # C.T = (L, d)
 
-    return C, phis, xl
+    return CT, phis, xl
 
 
 def lorenzEquations(t, x0, sigma, rho, beta):
