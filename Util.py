@@ -78,7 +78,7 @@ def nonlinear_approximation(x, fx, epsilon, L):
     C = linear_approximation(phis, fx)
 
     return C, phis
-
+ 
 
 def lorenzEquations(t, x0, sigma, rho, beta):
     """
