@@ -40,7 +40,7 @@ def plotLorenz(real_coor, delayed_coor_1, delayed_coor_2, delay, axis=0):
 
 def part_2():
     time = (0.0, 1000.0)
-    delta_t = 0.8
+    delta_t = 0.05
     t_eval = np.arange(0,1000,delta_t)
     x0 = [10, 10, 10]
     sigma = 10
@@ -60,13 +60,13 @@ def part_2():
     y_real_coor = sol[1, :sol.shape[1] - 2]
     y_delayed_1 = sol[1, 1:sol.shape[1] - 1]
     y_delayed_2 = sol[1, 2:]
-    plotLorenz(y_delayed_2, y_real_coor, y_delayed_1, delta_t, axis=1)
+    plotLorenz(y_real_coor, y_delayed_1, y_delayed_2, delta_t, axis=1)
 
     # plot for z
     z_real_coor = sol[2, :sol.shape[1]-2]
     z_delayed_1 = sol[2, 1:sol.shape[1]-1]
     z_delayed_2 = sol[2, 2:]
-    plotLorenz(z_delayed_2, z_delayed_1, z_real_coor, delta_t, axis=2)
+    plotLorenz(z_real_coor, z_delayed_1, z_delayed_2, delta_t, axis=2)
 
 
 def part_1():
@@ -115,7 +115,7 @@ def part_1():
     plt.show()
 
 def main():
-    part_1()
+    #part_1()
     part_2()
 
 
