@@ -7,13 +7,20 @@ from Util import *
 
 
 def part1(X_0, X_1):
+    """
+    V = X A.T
+
+    :param X_0: (N, n), (1000, 2) 1000 data points x0
+    :param X_1:  (N, n), (1000, 2) 1000 data points x1 generated from x0
+    :return: Transpose of the approximated matrix A
+    """
     # estimate the linear vector field that was used to generate the points x1 from the points x
     # Use the finite-difference formula from section (1.3) to estimate the vectors v(k) at all points x(k)
     # then approximate the matrix A ∈ R2×2 with a supervised learning problem
     V = (X_1 - X_0) / 0.1
 
-    A = linear_approximation(X_0, V)
-    NU = np.matmul(X_0, A)
+    AT = linear_approximation(X_0, V) # A= [[-0.49, 0.23],[-0.46, -0.96]]
+    NU = np.matmul(X_0, AT)
 
     fig, ax = plt.subplots(1, 1)
     ax.scatter(X_0[:, 0], X_0[:, 1], color='indianred', s=2, label="X0")
@@ -25,12 +32,14 @@ def part1(X_0, X_1):
     plt.savefig('plots/task_2_part_1.png')
     plt.show()
 
-    return A
+    return AT
 
 
-def part2(X_0, X_1, A):
-    NU = np.matmul(X_0, A)
-    X_1_prediction = NU * 0.1 + X_0
+def part2(X_0, X_1, AT):
+    # v(x) = Ax
+    NU = np.matmul(X_0, AT)  # vector field
+    dt = 0.1
+    X_1_prediction = NU * dt + X_0  # from finite-difference formula
 
     mean_squared_error = mse(X_1, X_1_prediction)
 
@@ -50,7 +59,7 @@ def part2(X_0, X_1, A):
 
 def part3(A):
     dt = 0.1
-    T = 100
+    T = 1000
     x0 = np.array([10, 10])
 
     # Find trajectory
@@ -62,10 +71,11 @@ def part3(A):
         x0 = x1
 
     # Calculate phase portrait
+    # v(x) = Ax
     x = np.arange(-10, 10, 0.01)
-    x1, x2 = np.meshgrid(x, x)
-    y1 = A[0][0] * x1 + A[1][0] * x2
-    y2 = A[0][1] * x1 + A[1][1] * x2
+    x1, x2 = np.meshgrid(x, x)  # x1,x2 : 2000x2000
+    y1 = A[0][0] * x1 + A[0][1] * x2
+    y2 = A[1][0] * x1 + A[1][1] * x2
 
     fig = plt.figure()
     ax = fig.add_subplot()
