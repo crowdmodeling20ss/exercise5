@@ -8,6 +8,12 @@ from Util import *
 
 
 def plot_linear_approximation(x, fx, fx_approximated):
+    """
+    Plots given linear approximation of a function.
+    :param x: Data points
+    :param fx: Function values of data points
+    :param fx_approximated: Linear approximation of function values
+    """
     fig, ax = plt.subplots(1, 1)
     ax.scatter(x, fx, color='indianred', s=2, label="Original Data")
     ax.plot(x, fx_approximated, c='dodgerblue', linewidth=0.5, label="Linear Approximation")
@@ -18,6 +24,15 @@ def plot_linear_approximation(x, fx, fx_approximated):
 
 
 def plot_nonlinear_approximation(x, fx, fx_approximated, L, epsilon):
+    """
+    Plots given nonlinear approximation of a function.
+
+    :param x: Data points
+    :param fx: Function values of data points
+    :param fx_approximated: Nonlinear approximation of function values
+    :param L: Number of radial basis functions
+    :param epsilon: Bandwidth
+    """
     fig, ax = plt.subplots(1, 1)
     ax.scatter(x, fx, color='indianred', s=2, label="Original Data")
     ax.scatter(x, fx_approximated, color='dodgerblue', s=2, label="Nonlinear Approximation")
@@ -29,6 +44,14 @@ def plot_nonlinear_approximation(x, fx, fx_approximated, L, epsilon):
 
 
 def plot_mse_vs_epsilon_and_l(D, fx_approximated_linear, fx_linear, x_linear_new):
+    """
+    Plots Mean Squared Error values for different L and bandwidth values.
+
+    :param D: Distance matrix [N,N]
+    :param fx_approximated_linear: Linear approximation values of function
+    :param fx_linear: Real values of function
+    :param x_linear_new: Data points of linear dataset
+    """
     linear_approximation_error = mse(fx_linear, fx_approximated_linear)  # mse=1.0604702468531419e-10
     # Calculate MSE for each epsilon value
     L = 20
@@ -61,7 +84,7 @@ def plot_mse_vs_epsilon_and_l(D, fx_approximated_linear, fx_linear, x_linear_new
 
         nonlinear_approximation_error = mse(fx_linear, fx_approximated_nonlinear.reshape(-1))
         error_difference = nonlinear_approximation_error - linear_approximation_error
-        print("epsilon: {}, linear error: {}, nonlinear error: {} difference: {}"
+        print("L: {}, linear error: {}, nonlinear error: {} difference: {}"
               .format(L, linear_approximation_error, nonlinear_approximation_error, error_difference))
         mess[index] = nonlinear_approximation_error
     fig, ax = plt.subplots(1, 1)
@@ -88,7 +111,6 @@ def part_1():
     # F = X.dot(A.T)
     AT = linear_approximation(x_linear_new, fx_linear)
     fx_approximated_linear = np.matmul(x_linear_new, AT)
-    # or A * x_linear ? did not change anything. = coz A:(2,) x_linear:(N, 2). it makes element-wise operation. will not work for different dimensions of A
     linear_cal_time = time.time() - linear_start_time
     plot_linear_approximation(x_linear, fx_linear, fx_approximated_linear)
 
@@ -113,6 +135,7 @@ def part_1():
 
 def part_2():
     data_nonlinear = read_file('nonlinear_function_data.txt')
+    print(data_nonlinear.shape)
     x_linear = data_nonlinear[:, 0]
     fx_linear = data_nonlinear[:, 1]
     x_linear_new = np.vstack([x_linear, np.ones(len(x_linear))]).T
