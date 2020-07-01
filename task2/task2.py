@@ -19,7 +19,7 @@ def part1(X_0, X_1):
     # then approximate the matrix A ∈ R2×2 with a supervised learning problem
     V = (X_1 - X_0) / 0.1
 
-    AT = linear_approximation(X_0, V) # A= [[-0.49, 0.23],[-0.46, -0.96]]
+    AT = linear_approximation(X_0, V)  # A= [[-0.49, 0.23],[-0.46, -0.96]]
     NU = np.matmul(X_0, AT)
 
     fig, ax = plt.subplots(1, 1)
@@ -79,12 +79,13 @@ def part3(A):
 
     fig = plt.figure()
     ax = fig.add_subplot()
-    ax.scatter(trajectory[:, 0], trajectory[:, 1], color='purple', s=2, label="trajectory")
+    ax.scatter(trajectory[:, 0], trajectory[:, 1], color='purple', s=2, label="Trajectory")
     ax.streamplot(x1, x2, y1, y2, color='dodgerblue', linewidth=1)
     ax.set_xlim([-10, 10])
     ax.set_ylim([-10, 10])
     plt.xlabel("x1")
     plt.ylabel("x2")
+    plt.legend()
     plt.savefig('plots/task_2_part_3.png')
     plt.show()
 
@@ -104,7 +105,7 @@ def main():
     ax.scatter(X_1[:, 0], X_1[:, 1], color='dodgerblue', s=2, label="X1")
     # ax.scatter(V[:, 0], V[:, 1], color='green', s=2, label="V")
     ax.scatter(X_1_prediction[:, 0], X_1_prediction[:, 1], color='orange', s=2, label="X1 Prediction")
-    ax.scatter(trajectory[:, 0], trajectory[:, 1], color='purple', s=2, label="trajectory")
+    ax.scatter(trajectory[:, 0], trajectory[:, 1], color='purple', s=2, label="Trajectory")
     ax.streamplot(*phase_portrait, color='gray', linewidth=1)
     ax.set_title('MSE = {}'.format(mean_squared_error))
     ax.set_xlabel('x')

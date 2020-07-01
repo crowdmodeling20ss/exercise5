@@ -33,10 +33,10 @@ def mse(y_truth, y_pred):
     :return: minimum squared root error between true data and approximation
     """
 
-    #d1 = (np.linalg.norm(y_truth - y_pred) ** 2) / len(y_pred)  # 1.0532185334742879e-16
-    #d2 = mean_squared_error(y_truth, y_pred)  # 5.266092667371443e-17
-    d3 = np.sum(((y_truth - y_pred) ** 2)) / len(y_truth) # 1.0532185334742874e-16
-    #d4 = ((y_truth - y_pred) ** 2).mean()  # 5.266092667371437e-17
+    # d1 = (np.linalg.norm(y_truth - y_pred) ** 2) / len(y_pred)  # 1.0532185334742879e-16
+    # d2 = mean_squared_error(y_truth, y_pred)  # 5.266092667371443e-17
+    d3 = np.sum(((y_truth - y_pred) ** 2)) / len(y_truth)  # 1.0532185334742874e-16
+    # d4 = ((y_truth - y_pred) ** 2).mean()  # 5.266092667371437e-17
 
     return d3
 
