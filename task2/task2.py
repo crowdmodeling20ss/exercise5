@@ -59,7 +59,7 @@ def part2(X_0, X_1, AT):
 
 def part3(A):
     dt = 0.1
-    T = 1000
+    T = 100
     x0 = np.array([10, 10])
 
     # Find trajectory
