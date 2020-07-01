@@ -8,6 +8,15 @@ from scipy.integrate import solve_ivp
 
 
 def plotLorenz(real_coor, delayed_coor_1, delayed_coor_2, delay, axis=0):
+    """
+    Plots Lorenz Attractor with its given (delayed) coordinates.
+
+    :param real_coor: Real x, y or z coordinate of the attractor.
+    :param delayed_coor_1:
+    :param delayed_coor_2:
+    :param delay:
+    :param axis:
+    """
     fig = plt.figure()
     ax0 = fig.gca(projection='3d')
     ax0.plot(real_coor, delayed_coor_1, delayed_coor_2, linewidth=0.5, color="indianred", linestyle=':',
@@ -92,7 +101,7 @@ def part_1():
     plt.show()
 
     # Plotting the coordinate against its delayed version , 3 dimensional
-    n_delay_2 = 2 * n_delay #-1*
+    n_delay_2 = 2 * n_delay
     x_2 = x0[:x0.shape[0] - n_delay_2]
     delayed_1 = x0[n_delay:x0.shape[0] - n_delay]
     delayed_2 = x0[n_delay_2:]

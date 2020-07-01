@@ -4,6 +4,20 @@ import time
 import sys
 from scipy.linalg import lstsq
 
+def matrix(x):
+    """
+    TODO: research there should be more convenient way to do this in numpy!
+
+    If input x is vector reshape it into matrix form (N, 1);
+    otherwise leave as it is.
+
+    :param x: vector (N,) or matrix (N, L)
+    :return: (N,1) or (N, L) matrix form of x
+    """
+    if len(x.shape) == 1:
+        return x.reshape(-1, 1)
+
+    return x
 
 def read_file(file_path):
     """
@@ -36,10 +50,10 @@ def mse(y_truth, y_pred):
 
 def distance_matrix(x):
     """
-    Creates distance matrix from given vector.
+    Creates distance matrix with elements of given vector with all the elements of the same vector.
 
-    :param x: Vector [N,].
-    :return: Matrix [N,N]
+    :param x: Vector [N,]
+    :return: Matrix [N,N] with distance values
     """
     n = x.shape[0]
     dist_matrix = np.zeros((n, n))

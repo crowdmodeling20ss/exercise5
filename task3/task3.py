@@ -7,6 +7,14 @@ import time
 
 
 def linear_prediction(X_0, X_1, dt):
+    """
+    Approximating linear vector fields from given points.
+
+    :param X_0: Data points x0
+    :param X_1: Data points x1
+    :param dt: Time step
+    :return: Predicted x1 values, MSE and vector field
+    """
     V = (X_1 - X_0) / dt
     A = linear_approximation(X_0, V)
     NU = np.matmul(X_0, A)
@@ -17,6 +25,15 @@ def linear_prediction(X_0, X_1, dt):
 
 
 def nonlinear_prediction(X_0, X_1, L, dt, epsilon=0.1761680514483659):
+    """
+
+    :param X_0: Data points x0
+    :param X_1: Data points x1
+    :param L: Number of radial basis functions
+    :param dt: Time step
+    :param epsilon: Bandwidth
+    :return: Predicted x1 values, vector field and MSE
+    """
     # D = distance_matrix(X_0)
     # np.sqrt(np.max(D)) * 0.05
     V = (X_1 - X_0) / dt  # ???
@@ -33,7 +50,6 @@ def part1(X_0, X_1):
 
     :param X_0: (2000, 2)
     :param X_1: (2000, 2)
-    :return:
     """
     dt = 0.1
     X_1_prediction, mean_squared_error, V = linear_prediction(X_0, X_1, dt)
@@ -75,6 +91,10 @@ def part1(X_0, X_1):
 
 
 def part2(X_0, X_1):
+    """
+    :param X_0: (2000, 2)
+    :param X_1: (2000, 2)
+    """
     epsilon = 0.1761680514483659
     dt = 0.1
 
@@ -131,6 +151,14 @@ def part2(X_0, X_1):
 
 
 def plot_part3_mse_vs_dt(V_L_1000, mse_L_1000, X_0, X_1, start, stop):
+    """
+    :param V_L_1000: Vector field
+    :param mse_L_1000: Mean Squared Error
+    :param X_0: Data points x0
+    :param X_1: Data points x1
+    :param start: Starting point for time step
+    :param stop: Ending point for time step
+    """
     dts = np.linspace(start, stop, 100)
     mses = np.zeros(dts.shape)
     for i, dt in enumerate(dts):
@@ -148,6 +176,10 @@ def plot_part3_mse_vs_dt(V_L_1000, mse_L_1000, X_0, X_1, start, stop):
     plt.show()
 
 def part3(X_0, X_1):
+    """
+    :param X_0: (2000, 2)
+    :param X_1: (2000, 2)
+    """
     epsilon = 0.1761680514483659
     dt = 0.5
 
