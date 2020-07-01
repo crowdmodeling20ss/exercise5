@@ -114,15 +114,24 @@ def part_1():
     linear_cal_time = time.time() - linear_start_time
     plot_linear_approximation(x_linear, fx_linear, fx_approximated_linear)
 
-    L = 10
+    L = 100
     # Calculating epsilon as in Diffusion Map algorithm
     nonlinear_start_time = time.time()
     D = distance_matrix(x_linear)
     epsilon = np.sqrt(np.max(D)) * 0.05
-    C, phis, xl = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L, [])
-    fx_approximated_nonlinear = np.matmul(phis, C)
+
+    CT, phis, xl = nonlinear_approximation(x_linear_new, fx_linear[:, np.newaxis], epsilon, L, [])
+    fx_approximated_nonlinear = np.matmul(phis, CT)
     nonlinear_cal_time = time.time() - nonlinear_start_time
     plot_nonlinear_approximation(x_linear, fx_linear, fx_approximated_nonlinear, L, epsilon)
+
+    #"""
+    #TEST for vector notation
+    CT, phis, xl = nonlinear_approximation(x_linear, fx_linear, epsilon, L, [])
+    fx_approximated_nonlinear = np.matmul(phis, CT)
+    nonlinear_cal_time = time.time() - nonlinear_start_time
+    plot_nonlinear_approximation(x_linear, fx_linear, fx_approximated_nonlinear, L, epsilon)
+    #"""
 
     # Why is it not a good idea to use radial basis functions for dataset (A)?
     # 1. Computational cost
