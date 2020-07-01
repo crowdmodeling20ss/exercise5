@@ -100,19 +100,23 @@ def nonlinear_approximation(x, fx, epsilon, L, xl):
     :param xl: (L, n) predefined random points for basis functions.
     :return:
     """""
-    number_of_rows = x.shape[0]
-    if xl == []:
-        random_indices = np.random.choice(number_of_rows, size=L, replace=False)
-        xl = x[random_indices]  # xl ∈ R^n
-
-    # Radial basis functions
-    phis = np.zeros((number_of_rows, L))
-    for l in range(L):
-        phis[:, l] = np.exp(-(np.linalg.norm(matrix(x) - xl[l], axis=1) ** 2) / epsilon ** 2)
+    phis, xl = calculate_phis(L, epsilon, x, xl)
 
     CT = linear_approximation(phis, fx)  # C.T = (L, d)
 
     return CT, phis, xl
+
+
+def calculate_phis(L, epsilon, x, xl):
+    number_of_rows = x.shape[0]
+    if xl == []:
+        random_indices = np.random.choice(number_of_rows, size=L, replace=False)
+        xl = x[random_indices]  # xl ∈ R^n
+    # Radial basis functions
+    phis = np.zeros((number_of_rows, L))
+    for l in range(L):
+        phis[:, l] = np.exp(-(np.linalg.norm(matrix(x) - xl[l], axis=1) ** 2) / epsilon ** 2)
+    return phis, xl
 
 
 def lorenzEquations(t, x0, sigma, rho, beta):
